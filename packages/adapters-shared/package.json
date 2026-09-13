@@ -1,0 +1,15 @@
+{
+  "name": "@semantik-tech/adapters-shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared types, paths, proxy URL helpers, and WritePlan for platform adapters",
+  "exports": {
+    ".": "./src/index.ts",
+    "./test/helpers.js": "./test/helpers.ts",
+    "./spike/*": "./spike/*.ts"
+  },
+  "dependencies": {
+    "@semantik-tech/manifest-schema": "0.1.0"
+  }
+}

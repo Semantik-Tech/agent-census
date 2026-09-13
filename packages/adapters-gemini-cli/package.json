@@ -1,0 +1,14 @@
+{
+  "name": "@semantik-tech/adapters-gemini-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Gemini CLI Client Target adapter — ~/.gemini/settings.json and skills/",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@semantik-tech/adapters-shared": "0.1.0",
+    "@semantik-tech/manifest-schema": "0.1.0"
+  }
+}

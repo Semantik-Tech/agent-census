@@ -1,0 +1,11 @@
+{
+  "name": "@semantik-tech/manifest-schema",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Client target ids and the MCP server shape shared by the adapters",
+  "exports": {
+    ".": "./src/index.ts",
+    "./client-targets": "./src/client-targets.ts"
+  }
+}

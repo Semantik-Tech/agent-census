@@ -1,0 +1,14 @@
+{
+  "name": "@semantik-tech/adapters-vscode",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "VS Code platform adapter — mcp.json (servers) and ~/.copilot/skills/",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@semantik-tech/adapters-shared": "0.1.0",
+    "@semantik-tech/manifest-schema": "0.1.0"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "agent-census",
+  "version": "0.1.0",
+  "description": "See what your AI coding agents are configured with: every MCP server and skill pack across Cursor, Claude Code, Gemini CLI, VS Code, Copilot CLI and Codex. Read-only, offline.",
+  "keywords": [
+    "ai-agents",
+    "coding-agents",
+    "mcp",
+    "model-context-protocol",
+    "agent-skills",
+    "skills",
+    "inventory",
+    "cursor",
+    "claude-code",
+    "gemini-cli",
+    "vscode",
+    "copilot",
+    "codex"
+  ],
+  "license": "MIT",
+  "author": "JAyokunle Enterprise UG",
+  "homepage": "https://github.com/Semantik-Tech/agent-census#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Semantik-Tech/agent-census.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Semantik-Tech/agent-census/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "agent-census": "dist/cli.js"
+  },
+  "files": [
+    "dist/cli.js",
+    "dist/THIRD-PARTY-NOTICES.txt",
+    "LICENSE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --import tsx --test test/*.test.ts",
+    "prepublishOnly": "npm run test && npm run build"
+  },
+  "devDependencies": {
+    "@semantik-tech/adapters-claude-code": "*",
+    "@semantik-tech/adapters-codex": "*",
+    "@semantik-tech/adapters-copilot-cli": "*",
+    "@semantik-tech/adapters-cursor": "*",
+    "@semantik-tech/adapters-gemini-cli": "*",
+    "@semantik-tech/adapters-shared": "*",
+    "@semantik-tech/adapters-vscode": "*",
+    "@semantik-tech/manifest-schema": "*",
+    "toml-eslint-parser": "1.0.3"
+  }
+}

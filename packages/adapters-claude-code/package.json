@@ -1,0 +1,14 @@
+{
+  "name": "@semantik-tech/adapters-claude-code",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Claude Code Client Target adapter — ~/.claude.json mcpServers and skills/",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@semantik-tech/adapters-shared": "0.1.0",
+    "@semantik-tech/manifest-schema": "0.1.0"
+  }
+}

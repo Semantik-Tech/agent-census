@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "filesystem-spike": {
+      "type": "stdio",
+      "command": "npx.cmd",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:\\Users\\Public\\agent-census-spike"],
+      "env": {}
+    },
+    "org-proxy-example": {
+      "type": "http",
+      "url": "https://mcp.example.com/org/acme/filesystem-spike",
+      "headers": {
+        "Authorization": "Bearer ${MCP_ENTERPRISE_TOKEN}"
+      }
+    }
+  }
+}

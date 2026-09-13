@@ -1,0 +1,14 @@
+{
+  "name": "@semantik-tech/adapters-copilot-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "GitHub Copilot CLI adapter — ~/.copilot/mcp-config.json and skills/",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@semantik-tech/adapters-shared": "0.1.0",
+    "@semantik-tech/manifest-schema": "0.1.0"
+  }
+}

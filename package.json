@@ -1,0 +1,31 @@
+{
+  "name": "agent-census-workspace",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "workspaces": [
+    "packages/manifest-schema",
+    "packages/adapters-shared",
+    "packages/adapters-cursor",
+    "packages/adapters-claude-code",
+    "packages/adapters-gemini-cli",
+    "packages/adapters-vscode",
+    "packages/adapters-copilot-cli",
+    "packages/adapters-codex",
+    "packages/agent-census"
+  ],
+  "scripts": {
+    "test": "node --import tsx --test packages/adapters-*/test/*.test.ts packages/agent-census/test/*.test.ts",
+    "build": "node packages/agent-census/build.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.2",
+    "esbuild": "^0.28.1",
+    "tsx": "^4.19.4",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

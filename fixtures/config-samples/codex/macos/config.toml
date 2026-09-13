@@ -1,0 +1,10 @@
+# Codex user config (managed MCP servers patched below)
+model = "gpt-4"
+
+[mcp_servers.filesystem-spike]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "/tmp/agent-census-spike"]
+
+[mcp_servers.org-proxy-example]
+url = "https://mcp.example.com/org/acme/filesystem-spike"
+http_headers = { Authorization = "Bearer ${env:MCP_ENTERPRISE_TOKEN}" }

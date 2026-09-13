@@ -1,0 +1,15 @@
+{
+  "name": "@semantik-tech/adapters-codex",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Codex CLI adapter — ~/.codex/config.toml mcp_servers patch and ~/.agents/skills/",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@semantik-tech/adapters-shared": "0.1.0",
+    "@semantik-tech/manifest-schema": "0.1.0",
+    "toml-eslint-parser": "1.0.3"
+  }
+}

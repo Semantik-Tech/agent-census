@@ -1,0 +1,18 @@
+{
+  "servers": {
+    "filesystem-spike": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/tmp/agent-census-spike"]
+    },
+    "org-proxy-example": {
+      "type": "http",
+      "url": "https://mcp.example.com/org/acme/filesystem-spike",
+      "headers": {
+        "Authorization": "Bearer ${env:MCP_ENTERPRISE_TOKEN}"
+      },
+      "oauth": {
+        "clientId": "vscode"
+      }
+    }
+  }
+}
