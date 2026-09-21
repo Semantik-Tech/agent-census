@@ -2,7 +2,6 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   buildProxyUrl,
-  defaultGatewayBaseUrl,
   applyProxyToFragment,
   type McpServerFragment,
 } from "../src/index.js";
@@ -25,13 +24,11 @@ test("cloud_gateway strips trailing slash from base", () => {
   assert.equal(url, "https://mcp.acme.example.com/slack");
 });
 
-test("cloud_gateway defaults base from orgSlug", () => {
-  assert.equal(defaultGatewayBaseUrl("acme-dev"), "https://mcp.acme-dev.example.com");
-  const url = buildProxyUrl("fs", {
-    proxyMode: "cloud_gateway",
-    orgSlug: "acme-dev",
-  });
-  assert.equal(url, "https://mcp.acme-dev.example.com/fs");
+test("cloud_gateway without gatewayBaseUrl is an error, not a made-up host", () => {
+  assert.throws(
+    () => buildProxyUrl("fs", { proxyMode: "cloud_gateway", orgSlug: "acme-dev" }),
+    /requires gatewayBaseUrl/,
+  );
 });
 
 test("local_proxy URL uses 127.0.0.1 and port", () => {
@@ -81,7 +78,11 @@ test("applyProxyToFragment rewrites stdio in cloud_gateway and local_proxy", () 
     url: "https://upstream.example.com",
   };
   assert.equal(
-    applyProxyToFragment(remote, { proxyMode: "cloud_gateway", orgSlug: "acme" }).url,
+    applyProxyToFragment(remote, {
+      proxyMode: "cloud_gateway",
+      orgSlug: "acme",
+      gatewayBaseUrl: "https://mcp.acme.example.com",
+    }).url,
     "https://mcp.acme.example.com/legacy",
   );
 });
