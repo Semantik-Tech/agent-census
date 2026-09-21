@@ -35,7 +35,9 @@ test("materializeSkillPackWritePlan emits demo-pack tree", async () => {
   });
 
   assert.ok(plan.files.some((f) => f.path.endsWith("SKILL.md")));
-  assert.ok(plan.files.some((f) => f.path.includes("templates/example.md")));
-  assert.ok(plan.files.some((f) => f.path.includes("scripts/noop.sh")));
+  // Plans use the host separator (nativePaths does too), so build the expected
+  // fragments the same way rather than hardcoding "/".
+  assert.ok(plan.files.some((f) => f.path.includes(join("templates", "example.md"))));
+  assert.ok(plan.files.some((f) => f.path.includes(join("scripts", "noop.sh"))));
   assert.equal(plan.files.every((f) => f.strategy === "replace"), true);
 });

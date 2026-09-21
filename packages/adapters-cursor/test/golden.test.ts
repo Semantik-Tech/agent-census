@@ -86,7 +86,7 @@ test("cursor: materializeSkillPack demo-pack", async () => {
     { slug: "demo-pack", skillPackId: "demo-pack", version: 1, files },
     { proxyMode: "cloud_gateway", orgSlug: "acme", targetOs: "macos" },
   );
-  assert.ok(plan.files.some((f) => f.path.includes("skills/demo-pack/SKILL.md")));
+  assert.ok(plan.files.some((f) => f.path.includes(join("skills", "demo-pack", "SKILL.md"))));
 });
 
 test("cursor: listInstalledSkillPacks", () => {
