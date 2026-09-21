@@ -39,7 +39,7 @@ export interface RenderContext {
   mcpLoopbackPort?: number;
   deviceId?: string;
   clientTarget?: ClientTarget;
-  /** e.g. https://mcp.{orgSlug}.example.com — defaults when omitted in cloud_gateway mode */
+  /** Gateway origin, e.g. https://gateway.example.com — required in cloud_gateway mode */
   gatewayBaseUrl?: string;
   /** Target OS for WritePlan path resolution (defaults to host OS in tests). */
   targetOs?: TargetOs;
