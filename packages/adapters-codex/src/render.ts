@@ -41,30 +41,18 @@ function renderServerBlock(id: string, fragment: McpServerFragment): string {
 }
 
 function tableKeyPath(table: AST.TOMLTable): string[] {
-  return table.key.keys.map((key) => key.name);
+  return table.key.keys.map((key) =>
+    key.type === "TOMLBare" ? key.name : key.value,
+  );
 }
 
 function collectMcpServerRanges(ast: AST.TOMLProgram): [number, number][] {
-  const ranges: [number, number][] = [];
-
-  const visit = (nodes: AST.TOMLTableContent[]): void => {
-    for (const node of nodes) {
-      if (node.type !== "TOMLTable") continue;
-      const path = tableKeyPath(node);
-      if (path[0] === "mcp_servers") {
-        ranges.push(node.range);
-      }
-      visit(node.body);
-    }
-  };
-
-  for (const top of ast.body) {
-    if (top.type === "TOMLTopLevelTable") {
-      visit(top.body);
-    }
-  }
-
-  return ranges;
+  // TOML tables are flat in this AST: every [table] header is a direct child
+  // of the top-level table, never nested inside another table.
+  return ast.body[0].body
+    .filter((node): node is AST.TOMLTable => node.type === "TOMLTable")
+    .filter((table) => tableKeyPath(table)[0] === "mcp_servers")
+    .map((table) => table.range);
 }
 
 function spliceRanges(
