@@ -6,7 +6,10 @@ import {
   coreMcpFields,
   loadFixtureJson,
   loadSkillPackDir,
+  markDirect,
   DEMO_PACK_ROOT,
+  DIRECT_URL,
+  PROXY_CASES,
 } from "@semantik-tech/adapters-shared/test/helpers.js";
 import {
   claudeCodeAdapter,
@@ -90,6 +93,23 @@ for (const os of OSS) {
       out.mcpServers["org-proxy-example"].url,
       "http://127.0.0.1:4242/org-proxy-example",
     );
+  });
+
+  test(`claude-code ${os}: proxy: false keeps the direct URL, other servers still proxied`, async () => {
+    const native = (await loadFixtureJson("claude-code", os)) as Record<string, unknown>;
+    for (const { ctx, proxied } of PROXY_CASES) {
+      const plan = claudeCodeAdapter.renderMcpServers(markDirect(parseClaudeJsonRoot(native)), {
+        ...ctx,
+        targetOs: os,
+        existingConfig: {},
+      });
+      const out = JSON.parse(plan.files[0].content) as {
+        mcpServers: Record<string, Record<string, unknown>>;
+      };
+      assert.equal(out.mcpServers["org-proxy-example"].url, DIRECT_URL);
+      assert.equal(out.mcpServers["org-proxy-example"].proxy, undefined);
+      assert.equal(out.mcpServers["filesystem-spike"].url, proxied("filesystem-spike"));
+    }
   });
 }
 

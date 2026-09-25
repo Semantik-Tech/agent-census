@@ -6,7 +6,10 @@ import {
   coreMcpFields,
   loadFixtureJson,
   loadSkillPackDir,
+  markDirect,
   DEMO_PACK_ROOT,
+  DIRECT_URL,
+  PROXY_CASES,
 } from "@semantik-tech/adapters-shared/test/helpers.js";
 import { vscodeAdapter, parseVscodeMcp, renderVscodeMcp } from "../src/index.js";
 
@@ -79,6 +82,22 @@ for (const os of OSS) {
       "http://127.0.0.1:37621/mcp/device-1/vscode/org-proxy-example",
     );
     assert.equal(out.servers["org-proxy-example"].oauth?.clientId, "vscode");
+  });
+
+  test(`vscode ${os}: proxy: false keeps the direct URL, other servers still proxied`, async () => {
+    const native = (await loadFixtureJson("vscode", os)) as Record<string, unknown>;
+    for (const { ctx, proxied } of PROXY_CASES) {
+      const plan = vscodeAdapter.renderMcpServers(markDirect(parseVscodeMcp(native)), {
+        ...ctx,
+        targetOs: os,
+      });
+      const out = JSON.parse(plan.files[0]!.content) as {
+        servers: Record<string, Record<string, unknown>>;
+      };
+      assert.equal(out.servers["org-proxy-example"].url, DIRECT_URL);
+      assert.equal(out.servers["org-proxy-example"].proxy, undefined);
+      assert.equal(out.servers["filesystem-spike"].url, proxied("filesystem-spike"));
+    }
   });
 }
 

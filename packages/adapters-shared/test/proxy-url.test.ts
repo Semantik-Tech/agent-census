@@ -102,3 +102,17 @@ test("applyProxyToFragment rewrites http url", () => {
   assert.equal(proxied.url, "https://mcp.acme-dev.example.com/org-proxy-example");
   assert.deepEqual(proxied.headers, { Authorization: "Bearer x" });
 });
+
+test("applyProxyToFragment keeps the direct url for proxy: false remote servers only", () => {
+  const ctx = { proxyMode: "local_proxy", orgSlug: "acme", localProxyPort: 9123 } as const;
+  const direct: McpServerFragment = {
+    id: "semantik",
+    transport: "http",
+    url: "https://api.example.com/v1/mcp",
+    proxy: false,
+  };
+  assert.equal(applyProxyToFragment(direct, ctx), direct);
+  // The schema rejects proxy: false on stdio; if one slips through it is still proxied.
+  const stdio: McpServerFragment = { id: "fs", transport: "stdio", command: "npx", proxy: false };
+  assert.equal(applyProxyToFragment(stdio, ctx).url, "http://127.0.0.1:9123/fs");
+});

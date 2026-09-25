@@ -21,6 +21,11 @@ export interface McpServer {
   command?: string;
   args?: string[];
   url?: string;
+  /**
+   * false = render the direct upstream URL, bypassing the cloud gateway / local
+   * proxy (no usage metering or policy). Remote transports only; default true.
+   */
+  proxy?: boolean;
   env?: Record<string, string>;
   auth?: UpstreamAuth;
 }

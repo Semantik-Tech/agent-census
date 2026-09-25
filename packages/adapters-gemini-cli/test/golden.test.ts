@@ -6,7 +6,10 @@ import {
   coreMcpFields,
   loadFixtureJson,
   loadSkillPackDir,
+  markDirect,
   DEMO_PACK_ROOT,
+  DIRECT_URL,
+  PROXY_CASES,
 } from "@semantik-tech/adapters-shared/test/helpers.js";
 import { geminiCliAdapter, parseGeminiSettings, renderGeminiSettings } from "../src/index.js";
 
@@ -83,6 +86,23 @@ for (const os of OSS) {
       out.mcpServers["org-proxy-example"].httpUrl,
       "http://127.0.0.1:7777/org-proxy-example",
     );
+  });
+
+  test(`gemini-cli ${os}: proxy: false keeps the direct URL, other servers still proxied`, async () => {
+    const native = (await loadFixtureJson("gemini-cli", os)) as Record<string, unknown>;
+    for (const { ctx, proxied } of PROXY_CASES) {
+      const plan = geminiCliAdapter.renderMcpServers(markDirect(parseGeminiSettings(native)), {
+        ...ctx,
+        targetOs: os,
+        existingConfig: native,
+      });
+      const out = JSON.parse(plan.files[0].content) as {
+        mcpServers: Record<string, Record<string, unknown>>;
+      };
+      assert.equal(out.mcpServers["org-proxy-example"].httpUrl, DIRECT_URL);
+      assert.equal(out.mcpServers["org-proxy-example"].proxy, undefined);
+      assert.equal(out.mcpServers["filesystem-spike"].httpUrl, proxied("filesystem-spike"));
+    }
   });
 }
 

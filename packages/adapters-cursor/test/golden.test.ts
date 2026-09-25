@@ -6,7 +6,10 @@ import {
   coreMcpFields,
   loadFixtureJson,
   loadSkillPackDir,
+  markDirect,
   DEMO_PACK_ROOT,
+  DIRECT_URL,
+  PROXY_CASES,
 } from "@semantik-tech/adapters-shared/test/helpers.js";
 import { cursorAdapter, parseCursorMcp, renderCursorMcp } from "../src/index.js";
 
@@ -77,6 +80,22 @@ for (const os of OSS) {
       mcpServers: Record<string, { url?: string }>;
     };
     assert.equal(out.mcpServers["org-proxy-example"].url, "http://127.0.0.1:9999/org-proxy-example");
+  });
+
+  test(`cursor ${os}: proxy: false keeps the direct URL, other servers still proxied`, async () => {
+    const native = (await loadFixtureJson("cursor", os)) as Record<string, unknown>;
+    for (const { ctx, proxied } of PROXY_CASES) {
+      const plan = cursorAdapter.renderMcpServers(markDirect(parseCursorMcp(native)), {
+        ...ctx,
+        targetOs: os,
+      });
+      const out = JSON.parse(plan.files[0].content) as {
+        mcpServers: Record<string, Record<string, unknown>>;
+      };
+      assert.equal(out.mcpServers["org-proxy-example"].url, DIRECT_URL);
+      assert.equal(out.mcpServers["org-proxy-example"].proxy, undefined);
+      assert.equal(out.mcpServers["filesystem-spike"].url, proxied("filesystem-spike"));
+    }
   });
 }
 
