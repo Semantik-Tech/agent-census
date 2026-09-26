@@ -7,7 +7,10 @@ import {
   coreMcpFields,
   loadFixtureText,
   loadSkillPackDir,
+  markDirect,
   DEMO_PACK_ROOT,
+  DIRECT_URL,
+  PROXY_CASES,
 } from "@semantik-tech/adapters-shared/test/helpers.js";
 import {
   codexAdapter,
@@ -99,6 +102,24 @@ for (const os of OSS) {
       value.mcp_servers["org-proxy-example"].url,
       "http://127.0.0.1:4242/org-proxy-example",
     );
+  });
+
+  test(`codex ${os}: proxy: false keeps the direct URL, other servers still proxied`, async () => {
+    const nativeToml = await loadFixtureText("codex", os);
+    const parsed = getStaticTOMLValue(parseTOML(nativeToml)) as Record<string, unknown>;
+    for (const { ctx, proxied } of PROXY_CASES) {
+      const plan = codexAdapter.renderMcpServers(markDirect(parseCodexConfig(parsed)), {
+        ...ctx,
+        targetOs: os,
+        existingConfig: nativeToml,
+      });
+      const value = getStaticTOMLValue(parseTOML(plan.files[0]!.content)) as {
+        mcp_servers: Record<string, Record<string, unknown>>;
+      };
+      assert.equal(value.mcp_servers["org-proxy-example"].url, DIRECT_URL);
+      assert.equal(value.mcp_servers["org-proxy-example"].proxy, undefined);
+      assert.equal(value.mcp_servers["filesystem-spike"].url, proxied("filesystem-spike"));
+    }
   });
 }
 

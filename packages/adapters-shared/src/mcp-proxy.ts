@@ -1,11 +1,13 @@
 import { buildProxyUrl } from "./proxy-url.js";
 import type { McpServerFragment, RenderContext } from "./types.js";
 
-/** Route every org-managed server through the managed sidecar/gateway. */
+/** Route org-managed servers through the managed sidecar/gateway unless a remote server sets `proxy: false`. */
 export function applyProxyToFragment(
   fragment: McpServerFragment,
   ctx: RenderContext,
 ): McpServerFragment {
+  // The schema only allows proxy: false on http/sse; stdio is always proxied below.
+  if (fragment.proxy === false && fragment.transport !== "stdio") return fragment;
   // cloud_gateway + local_proxy rewrite stdio → gateway/local proxy URL (device tunnel for stdio in cloud).
   if (fragment.transport === "stdio") {
     if (ctx.proxyMode === "local_proxy" || ctx.proxyMode === "cloud_gateway") {

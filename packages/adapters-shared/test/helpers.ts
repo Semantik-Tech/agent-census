@@ -74,3 +74,23 @@ export function coreMcpFields(fragments: { id: string; transport: string; comman
     env: f.env,
   }));
 }
+
+/** Upstream URL of the fixtures' `org-proxy-example` http server. */
+export const DIRECT_URL = "https://mcp.example.com/org/acme/filesystem-spike";
+
+/** Both proxy modes, with the URL a proxied server id renders to in each. */
+export const PROXY_CASES = [
+  {
+    ctx: { proxyMode: "cloud_gateway", orgSlug: "acme-dev", gatewayBaseUrl: "https://gw.example.com" },
+    proxied: (id: string) => `https://gw.example.com/${id}`,
+  },
+  {
+    ctx: { proxyMode: "local_proxy", orgSlug: "acme-dev", localProxyPort: 4242 },
+    proxied: (id: string) => `http://127.0.0.1:4242/${id}`,
+  },
+] as const;
+
+/** Mark the fixtures' `org-proxy-example` server `proxy: false`. */
+export function markDirect<T extends { id: string }>(fragments: T[]): T[] {
+  return fragments.map((f) => (f.id === "org-proxy-example" ? { ...f, proxy: false } : f));
+}

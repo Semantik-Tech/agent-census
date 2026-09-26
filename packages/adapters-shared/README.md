@@ -24,7 +24,7 @@ Production adapter modules do **not** read the filesystem. Callers (desktop agen
 | `cloud_gateway` | `{gatewayBaseUrl}/{mcpServerId}` (default base: `https://mcp.{orgSlug}.example.com`) |
 | `local_proxy` | `http://127.0.0.1:{localProxyPort}/{mcpServerId}` (default port: 8765) |
 
-Stdio transports are never proxied. Set `proxy: false` on a fragment to preserve a direct URL.
+Stdio transports are rewritten to the proxy URL too (the proxy runs the command). Set `proxy: false` on an http/sse fragment to keep its direct URL; the manifest schema rejects `proxy: false` on stdio.
 
 ## SkillPacks
 
