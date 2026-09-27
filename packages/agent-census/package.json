@@ -19,13 +19,13 @@
   ],
   "license": "MIT",
   "author": "JAyokunle Enterprise UG",
-  "homepage": "https://github.com/Semantik-Tech/agent-census#readme",
+  "homepage": "https://github.com/jayokunle/agent-census#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Semantik-Tech/agent-census.git"
+    "url": "git+https://github.com/jayokunle/agent-census.git"
   },
   "bugs": {
-    "url": "https://github.com/Semantik-Tech/agent-census/issues"
+    "url": "https://github.com/jayokunle/agent-census/issues"
   },
   "type": "module",
   "engines": {
