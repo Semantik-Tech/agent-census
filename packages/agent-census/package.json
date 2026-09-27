@@ -1,6 +1,6 @@
 {
   "name": "agent-census",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "See what your AI coding agents are configured with: every MCP server and skill pack across Cursor, Claude Code, Gemini CLI, VS Code, Copilot CLI and Codex. Read-only, offline.",
   "keywords": [
     "ai-agents",
