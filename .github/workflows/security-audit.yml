@@ -1,0 +1,84 @@
+name: Security Audit
+
+on:
+  schedule:
+    # Every Saturday at 09:00 UTC
+    - cron: "0 9 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-audit
+  cancel-in-progress: false
+
+jobs:
+  audit-fix:
+    name: npm audit fix
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Audit before fix
+        id: before
+        run: |
+          {
+            echo 'report<<EOF'
+            npm audit || true
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      # Applies semver-compatible fixes only; breaking (--force) upgrades are left for a human
+      - name: Apply fixes
+        run: npm audit fix || true
+
+      - name: Audit after fix
+        id: after
+        run: |
+          {
+            echo 'report<<EOF'
+            npm audit || true
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Verify fixes
+        run: |
+          if git diff --quiet; then
+            echo "No dependency changes."
+            exit 0
+          fi
+          npm ci
+          npm test
+          npm run build
+
+      - name: Open pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: security/npm-audit-fix
+          delete-branch: true
+          commit-message: "fix(deps): apply npm audit security fixes"
+          title: "fix(deps): apply npm audit security fixes"
+          labels: security, dependencies
+          body: |
+            Automated weekly `npm audit fix` run.
+
+            ### Before
+            ```
+            ${{ steps.before.outputs.report }}
+            ```
+
+            ### After
+            ```
+            ${{ steps.after.outputs.report }}
+            ```
+
+            Anything still listed under **After** needs a breaking upgrade (`npm audit fix --force`) and should be handled manually.
